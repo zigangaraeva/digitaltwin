@@ -1,0 +1,33 @@
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+public class DiamondTest
+{
+    [UnityTest]
+    public IEnumerator DiamondCollectsProperly()
+    {
+        // Создаем игровой объект с компонентом Diamond
+        GameObject diamondObject = new GameObject();
+        Diamond diamondComponent = diamondObject.AddComponent<Diamond>();
+
+        // Создаем игровой объект с компонентом PlayerInventory
+        GameObject playerObject = new GameObject();
+        PlayerInventory playerInventory = playerObject.AddComponent<PlayerInventory>();
+
+        // Поддерживаем тестовую сцену активной
+        yield return null;
+
+        // Задаем игровому объекту коллайдер
+        Collider collider = diamondObject.AddComponent<BoxCollider>();
+
+        // Задаем игровому объекту коллайдер, чтобы имитировать столкновение с игроком
+        Collider playerCollider = playerObject.AddComponent<BoxCollider>();
+
+        // Запускаем OnTriggerEnter
+        diamondComponent.OnTriggerEnter(playerCollider);
+
+        // Проверяем, был ли вызван метод DiamondCollected() у PlayerInventory
+        Assert.IsTrue(playerInventory.diamondCollected);
+    }
+}
